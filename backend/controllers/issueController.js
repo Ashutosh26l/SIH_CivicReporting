@@ -1,5 +1,7 @@
-import { addIssueWithImages, fetchAllIssuesWithImagesAndUpvotes, fetchIssueByIdWithImagesAndUpvotes, removeUpvote, updateIssueById } from '../services/issueService.js';
+import { addIssueWithImages, fetchAllIssuesWithImagesUpvotesComments, fetchIssueByIdWithImagesUpvotesComments, removeUpvote, updateIssueById } from '../services/issueService.js';
 import { addUpvote } from '../services/issueService.js';
+import { addComment } from '../services/issueService.js';
+
 
 export const addIssue = async (req, res) => {
   try {
@@ -36,7 +38,7 @@ export const addIssue = async (req, res) => {
 
 export const getAllIssues = async (req, res) => {
   try {
-    const issues = await fetchAllIssuesWithImagesAndUpvotes();
+    const issues = await fetchAllIssuesWithImagesUpvotesComments();
     res.json({ issues });
   } catch (error) {
     console.error(error);
@@ -103,9 +105,46 @@ export const removeIssueUpvote = async (req, res) => {
 export const getIssueById = async (req, res) => {
   try {
     const { id } = req.params;
-    const issue = await fetchIssueByIdWithImagesAndUpvotes(id);
+    const issue = await fetchIssueByIdWithImagesUpvotesComments(id);
     res.json({ issue });
   } catch (error) {
     res.status(404).json({ error: error.message || 'Issue not found' });
+  }
+};
+
+
+export const addIssueComment = async (req, res) => {
+  try {
+    const { issueId } = req.params;
+    const { user_id, comment } = req.body;
+
+    if (!user_id || !comment) {
+      return res.status(400).json({ error: 'user_id and comment required' });
+    }
+
+    const newComment = await addComment(issueId, user_id, comment);
+    res.status(201).json({ message: 'Comment added', comment: newComment });
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Server error' });
+  }
+};
+
+
+export const deleteIssueComment = async (req, res) => {
+  try {
+    const { issueId, commentId } = req.params;
+    const { user_id } = req.body;
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'user_id required' });
+    }
+
+    const deleted = await deleteComment(commentId, user_id);
+    if (!deleted) {
+      return res.status(403).json({ error: 'Not allowed to delete this comment' });
+    }
+    res.json({ message: 'Comment deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Server error' });
   }
 };
