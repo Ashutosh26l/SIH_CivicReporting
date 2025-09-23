@@ -6,6 +6,7 @@ import UserSignup from './UserSignup';
 import './App.css';
 import Home from './Home';
 import IssuesList from './IssuesList';
+import LandingPage from './landing_page'; // ✅ Corrected import
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/issues" element={<IssuesList />} />
+        <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </Router>
   );
