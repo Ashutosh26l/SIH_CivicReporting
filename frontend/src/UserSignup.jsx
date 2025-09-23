@@ -67,6 +67,7 @@ const UserSignup = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
+            <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
             <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors ">SignUp</Link>
             <Link to="/login" className="text-gray-600 hover:text-green-700 transition-colors">Login</Link>
           </nav>
@@ -84,6 +85,7 @@ const UserSignup = () => {
           <div className="md:hidden bg-white border-t">
             <nav className="flex flex-col items-center space-y-4 py-4">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
+              <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
               <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors ">SignUp</Link>
               <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Login</Link>
             </nav>

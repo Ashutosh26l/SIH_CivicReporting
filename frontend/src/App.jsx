@@ -14,6 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Redirect '/' to '/login' by default */}
         <Route path="/" element={<LandingPage />} />
 
         <Route path="/login" element={<UserLogin />} />
@@ -22,6 +23,8 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/issues" element={<IssuesList />} />
         <Route path="/issue-detail" element={<IssueDetail />} />
+        <Route path="/issuelist" element={<IssueList />} />
+
         
       </Routes>
     </Router>

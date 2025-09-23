@@ -70,6 +70,7 @@ export default function LandingPage() {
           <nav className="hidden md:flex items-center space-x-8">
             {/* <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a> */}
             <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</Link>
+            <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
             <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
             <Link
               to="/login"
@@ -92,6 +93,7 @@ export default function LandingPage() {
             <nav className="flex flex-col items-center space-y-4 py-4">
               {/* <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a> */}
               <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</Link>
+              <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
               <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
               <Link
                 to="/login"
