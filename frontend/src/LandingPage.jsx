@@ -39,10 +39,9 @@ const CheckCircleIcon = () => (
 );
 
 // --- Main App Component ---
-export default function landingPage() {
+export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Placeholder data for recent issues.
   const issues = [
     { id: 1, category: 'Waste Management', location: 'Ranchi', status: 'Resolved', imageUrl: 'https://placehold.co/600x400/c7e8ca/4d594f?text=Garbage+Cleared' },
     { id: 2, category: 'Pothole', location: 'Jamshedpur', status: 'In Progress', imageUrl: 'https://placehold.co/600x400/fff3cd/4d594f?text=Road+Repair' },
@@ -69,14 +68,13 @@ export default function landingPage() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a>
-            <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</a>
-            <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">User SignUp</a>
+            {/* <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a> */}
+            <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</Link>
+            <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
             <Link
               to="/login"
-              className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 shadow-md"
-            >
-              User Login
+              className="text-gray-600 hover:text-green-700 transition-colors">
+              Login
             </Link>
           </nav>
 
@@ -92,14 +90,14 @@ export default function landingPage() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <nav className="flex flex-col items-center space-y-4 py-4">
-              <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a>
-              <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</a>
-              <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">User SignUp</a>
+              {/* <a href="#" className="text-gray-600 hover:text-green-700 transition-colors">Home</a> */}
+              <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report Issue</Link>
+              <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
               <Link
                 to="/login"
-                className="bg-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-700 transition-all duration-300 w-auto"
+                className="text-gray-600 hover:text-green-700 transition-colors"
               >
-                User Login
+                Login
               </Link>
             </nav>
           </div>
@@ -117,7 +115,12 @@ export default function landingPage() {
             <p className="text-lg md:text-xl mb-8 font-light text-gray-200">
               Your voice for a better Jharkhand. Report civic issues in your area and help build a cleaner, safer community together.
             </p>
-            <button className="bg-yellow-400 text-gray-900 font-bold py-3 px-8 text-lg rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 shadow-xl">Report an Issue Now</button>
+            <Link
+              to="/home"
+              className="bg-yellow-400 text-gray-900 font-bold py-3 px-8 text-lg rounded-full hover:bg-yellow-500 transition-all duration-300 transform hover:scale-110 shadow-xl"
+            >
+              Report an Issue Now
+            </Link>
           </div>
         </section>
 
@@ -160,7 +163,7 @@ export default function landingPage() {
                       <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(issue.status)}`}>{issue.status}</span>
                     </div>
                     <p className="text-lg font-bold text-gray-800">{issue.location}</p>
-                    <p className="text-gray-500 text-sm mt-1">Reported on September 23, 2025</p>
+                    <p className="text-gray-500 text-sm mt-1">Reported on September 24, 2025</p>
                   </div>
                 </div>
               ))}
@@ -183,7 +186,9 @@ export default function landingPage() {
             <div>
               <h3 className="font-bold text-lg mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="text-gray-400 hover:text-white">Report an Issue</a></li>
+                {/* === THIS IS THE UPDATED PART === */}
+                <li><Link to="/home" className="text-gray-400 hover:text-white">Report an Issue</Link></li>
+                {/* === END OF UPDATE === */}
                 <li><a href="#" className="text-gray-400 hover:text-white">FAQs</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white">Contact Us</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>

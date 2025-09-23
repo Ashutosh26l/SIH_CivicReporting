@@ -6,7 +6,7 @@ import UserSignup from './UserSignup';
 import './App.css';
 import Home from './Home';
 import IssuesList from './IssuesList';
-import LandingPage from './landing_page';
+import LandingPage from './LandingPage';
 import IssueDetail from './IssueDetail';
 
 function App() {
