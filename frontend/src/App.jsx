@@ -24,8 +24,6 @@ function App() {
         <Route path="/issues" element={<IssuesList />} />
         { <Route path="/landing" element={<LandingPage />} /> }
         <Route path="/issue-detail" element={<IssueDetail />} />
-        <Route path="/issuelist" element={<IssueList />} />
-
         
       </Routes>
     </Router>

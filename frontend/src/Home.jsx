@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+const MenuIcon = ({ className }) => (
+  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+);
+const XIcon = ({ className }) => (
+  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
 
 const Home = () => {
   const [photos, setPhotos] = useState([]);
   const [previews, setPreviews] = useState([]);
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  const [location, setLocation] = useState({
-    lat: '',
-    lng: '',
-    address: '',
-    city: '',
-    state: '',
-  });
+  const [location, setLocation] = useState({ lat: '', lng: '', address: '', city: '', state: '' });
   const [form, setForm] = useState({ title: '', description: '', category: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false); // changed to boolean
+  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -157,7 +166,8 @@ const Home = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 py-16">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 py-16 pt-20">
+        <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
           <div className="text-green-600 mb-6">
             <svg className="mx-auto h-14 w-14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -170,7 +180,7 @@ const Home = () => {
           </p>
           <button
             className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-400 transition"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/landing')}
           >
             Go to Home
           </button>
@@ -180,9 +190,10 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-start sm:items-center justify-center bg-gray-50 px-4 py-8 sm:py-12">
-      <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-6 sm:p-10">
-        <h1 className="text-3xl font-extrabold mb-6 text-gray-900 text-center">Create New Issue</h1>
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-green-50 to-green-100 pt-20 px-4 py-8 sm:py-12">
+      <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <div className="flex-grow w-full max-w-3xl bg-white rounded-xl shadow-lg p-6 sm:p-10 mx-auto">
+        <h1 className="text-3xl font-extrabold mb-6 text-green-900 text-center">Create New Issue</h1>
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           <div>
             <label className="block mb-2 font-semibold text-gray-700">Capture or select photos (max 10):</label>
@@ -192,7 +203,7 @@ const Home = () => {
               multiple
               capture="environment"
               onChange={handlePhotoChange}
-              className="block w-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+              className="block w-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
             />
             <div className="flex flex-wrap gap-4 mt-3">
               {previews.map((src, i) => (
@@ -238,7 +249,7 @@ const Home = () => {
               value={form.title}
               onChange={handleChange}
               placeholder="Issue Title"
-              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             />
           </div>
@@ -249,7 +260,7 @@ const Home = () => {
               value={form.description}
               onChange={handleChange}
               placeholder="Issue Description"
-              className="w-full border border-gray-300 px-4 py-2 rounded h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 px-4 py-2 rounded h-24 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             />
           </div>
@@ -261,7 +272,7 @@ const Home = () => {
               value={form.category}
               onChange={handleChange}
               placeholder="Category"
-              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             />
           </div>
@@ -276,7 +287,7 @@ const Home = () => {
             className={`w-full py-3 rounded font-semibold transition duration-200 ${
               submitting || photos.length < 1
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-4 focus:ring-blue-400'
+                : 'bg-green-600 hover:bg-green-700 text-white focus:ring-4 focus:ring-green-400'
             }`}
           >
             {submitting ? 'Submitting...' : 'Submit Issue'}
@@ -286,5 +297,33 @@ const Home = () => {
     </div>
   );
 };
+
+const Navbar = ({ isMenuOpen, setIsMenuOpen }) => (
+  <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg shadow-sm z-50 w-full">
+    <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="flex items-center space-x-3">
+        <span className="text-2xl font-extrabold text-green-700 tracking-wider">Pioneers</span>
+      </div>
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex items-center space-x-8">
+        <Link to="/landing" className="text-green-700 hover:text-green-900 transition-colors">Home</Link>
+      </nav>
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-green-700 focus:outline-none">
+          {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+        </button>
+      </div>
+    </div>
+    {/* Mobile Navigation Menu */}
+    {isMenuOpen && (
+      <div className="md:hidden bg-white border-t">
+        <nav className="flex flex-col items-center space-y-4 py-4">
+          <Link to="/landing" onClick={() => setIsMenuOpen(false)} className="text-green-700 hover:text-green-900 transition-colors">Landing Page</Link>
+        </nav>
+      </div>
+    )}
+  </header>
+);
 
 export default Home;
