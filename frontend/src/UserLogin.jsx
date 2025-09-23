@@ -74,7 +74,7 @@ const UserLogin = ({ onLoginSuccess }) => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <nav className="flex flex-col items-center space-y-4 py-4">
-              <Link to="/landing" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
               <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
               <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors font-semibold">Login</Link>
             </nav>
