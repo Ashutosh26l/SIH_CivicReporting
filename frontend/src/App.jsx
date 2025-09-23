@@ -8,6 +8,7 @@ import Home from './Home';
 import IssuesList from './IssuesList';
 import LandingPage from './LandingPage';
 import IssueDetail from './IssueDetail';
+import IssueList from './IssueList';
 
 function App() {
   return (
@@ -22,7 +23,9 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/issues" element={<IssuesList />} />
         { <Route path="/landing" element={<LandingPage />} /> }
-        <Route path="/issuedetail" element={<IssueDetail />} />
+        <Route path="/issue-detail" element={<IssueDetail />} />
+        <Route path="/issuelist" element={<IssueList />} />
+
         
       </Routes>
     </Router>
