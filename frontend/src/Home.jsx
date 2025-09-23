@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const [photos, setPhotos] = useState([]);
   const [previews, setPreviews] = useState([]);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [location, setLocation] = useState({
     lat: '',
     lng: '',
@@ -139,7 +140,7 @@ const Home = () => {
     photos.forEach(img => data.append('images', img));
 
     try {
-      await axios.post('http://localhost:3000/api/issues', data, {
+      await axios.post(`${baseUrl}/api/issues`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSuccess('Issue submitted successfully');

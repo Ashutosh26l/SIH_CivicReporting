@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const UserLogin = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -12,7 +13,7 @@ const UserLogin = ({ onLoginSuccess }) => {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:3000/api/users/login', {
+      const response = await axios.post(`${baseUrl}/api/users/login`, {
         username,
         password,
       });

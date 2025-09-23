@@ -25,6 +25,7 @@ const IssueDetail = () => {
   const [issue, setIssue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [comments, setComments] = useState([
     { id: 1, author: 'Jane Doe', avatar: 'https://i.pravatar.cc/150?u=jane', text: 'Thanks for reporting this. Our team is actively looking into it and we hope to provide an update soon.' },
     { id: 2, author: 'John Smith', avatar: 'https://i.pravatar.cc/150?u=john', text: 'I noticed the same issue yesterday! Glad it\'s being tracked now.' },
@@ -38,7 +39,7 @@ const IssueDetail = () => {
   useEffect(() => {
     const fetchIssueData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/issues');
+        const response = await fetch(`${baseUrl}/api/issues`);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         setIssue(data.issues[0]);

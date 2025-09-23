@@ -7,6 +7,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [successMessage, setSuccessMessage] = useState('');
   
   const navigate = useNavigate(); // Initialize the navigate hook
@@ -19,7 +20,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-        const response = await axios.post('http://localhost:3000/api/admin/login', {
+        const response = await axios.post(`${baseUrl}/api/admin/login`, {
         username,
         password,
         });

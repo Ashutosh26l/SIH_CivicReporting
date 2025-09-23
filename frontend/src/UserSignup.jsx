@@ -6,6 +6,7 @@ const UserSignup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -18,7 +19,7 @@ const UserSignup = () => {
     }
     setError('');
     try {
-      const response = await axios.post('http://localhost:3000/api/users/signup', {
+      const response = await axios.post(`${baseUrl}/api/users/signup`, {
         username,
         password,
       });

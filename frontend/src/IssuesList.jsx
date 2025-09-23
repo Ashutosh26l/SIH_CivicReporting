@@ -6,6 +6,7 @@ const IssuesList = () => {
   const [issues, setIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [mainImage, setMainImage] = useState(null);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const IssuesList = () => {
       setLoading(true);
       setError('');
       try {
-        const response = await axios.get('http://localhost:3000/api/issues');
+        const response = await axios.get(`${baseUrl}/api/issues`);
         setIssues(response.data.issues || []);
       } catch {
         setError('Failed to fetch issues');
