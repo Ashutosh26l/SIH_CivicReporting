@@ -14,15 +14,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Redirect '/' to '/login' by default */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<LandingPage />} />
 
         <Route path="/login" element={<UserLogin />} />
         <Route path="/signup" element={<UserSignup />} />
         <Route path="/home" element={<Home />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/issues" element={<IssuesList />} />
-        { <Route path="/landing" element={<LandingPage />} /> }
         <Route path="/issue-detail" element={<IssueDetail />} />
         
       </Routes>

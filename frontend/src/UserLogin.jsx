@@ -57,7 +57,7 @@ const UserLogin = ({ onLoginSuccess }) => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/landing" className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
+            <Link to="/" className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
             <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
             <Link to="/login" className="text-gray-600 hover:text-green-700 transition-colors font-semibold">Login</Link>
           </nav>

@@ -180,7 +180,7 @@ const Home = () => {
           </p>
           <button
             className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-400 transition"
-            onClick={() => navigate('/landing')}
+            onClick={() => navigate('/')}
           >
             Go to Home
           </button>
