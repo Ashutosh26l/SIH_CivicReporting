@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
 
 // --- SVG Icons (Self-contained components) ---
 const MenuIcon = ({ className }) => (
@@ -57,42 +58,7 @@ const UserSignup = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-r from-green-50 to-green-100">
-      {/* Navbar */}
-      <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <span className="text-2xl font-extrabold text-green-700 tracking-wider">Pioneers</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
-            <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-            <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors ">SignUp</Link>
-            <Link to="/login" className="text-gray-600 hover:text-green-700 transition-colors">Login</Link>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 focus:outline-none">
-              {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <nav className="flex flex-col items-center space-y-4 py-4">
-              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
-              <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-              <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors ">SignUp</Link>
-              <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Login</Link>
-            </nav>
-          </div>
-        )}
-
-      </header>
+      <Navbar />
 
       {/* Signup Form */}
       <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
