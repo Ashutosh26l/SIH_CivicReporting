@@ -1,4 +1,5 @@
-import { addIssueWithImages, fetchAllIssuesWithImagesAndUpvotes } from '../services/issueService.js';
+import { addIssueWithImages, fetchAllIssuesWithImagesAndUpvotes, fetchIssueByIdWithImagesAndUpvotes, removeUpvote, updateIssueById } from '../services/issueService.js';
+import { addUpvote } from '../services/issueService.js';
 
 export const addIssue = async (req, res) => {
   try {
@@ -40,5 +41,71 @@ export const getAllIssues = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message || 'Server error' });
+  }
+};
+
+
+export const updateIssue = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: 'No fields provided for update' });
+    }
+
+    const updated = await updateIssueById(id, updates);
+    res.json({ message: 'Issue updated', issue: updated });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || 'Server error' });
+  }
+};
+
+
+
+
+
+export const addIssueUpvote = async (req, res) => {
+  try {
+    const { id } = req.params; // issue_id
+    const { user_id } = req.body;
+
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+
+    await addUpvote(id, user_id);
+    res.json({ message: 'Upvote added' });
+  } catch (error) {
+    if (error.code === '23505') { // unique_violation in Postgres
+      return res.status(409).json({ error: 'Already upvoted by this user' });
+    }
+    console.error(error);
+    res.status(500).json({ error: error.message || 'Server error' });
+  }
+};
+
+export const removeIssueUpvote = async (req, res) => {
+  try {
+    const { id } = req.params; // issue_id
+    const { user_id } = req.body;
+
+    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+
+    await removeUpvote(id, user_id);
+    res.json({ message: 'Upvote removed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || 'Server error' });
+  }
+};
+
+
+export const getIssueById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const issue = await fetchIssueByIdWithImagesAndUpvotes(id);
+    res.json({ issue });
+  } catch (error) {
+    res.status(404).json({ error: error.message || 'Issue not found' });
   }
 };
