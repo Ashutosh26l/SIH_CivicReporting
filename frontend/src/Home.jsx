@@ -321,7 +321,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }) => (
       <div className="md:hidden bg-white border-t">
         <nav className="flex flex-col items-center space-y-4 py-4">
           <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-          <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-green-700 hover:text-green-900 transition-colors">Landing Page</Link>
+          <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-green-700 hover:text-green-900 transition-colors">Home</Link>
         </nav>
       </div>
     )}
