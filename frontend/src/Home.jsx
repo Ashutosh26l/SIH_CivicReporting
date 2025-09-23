@@ -15,7 +15,7 @@ const Home = () => {
   });
   const [form, setForm] = useState({ title: '', description: '', category: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState(false); // changed to boolean
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -125,12 +125,11 @@ const Home = () => {
     }
     setSubmitting(true);
     setError('');
-    setSuccess('');
+    setSuccess(false);
 
-    // Get the user_id from localStorage
     const userId = localStorage.getItem('user_id');
     const data = new FormData();
-    data.append('user_id', userId); // Add the user_id to the form data
+    data.append('user_id', userId);
     data.append('issue_title', form.title);
     data.append('description', form.description);
     data.append('category', form.category);
@@ -143,7 +142,7 @@ const Home = () => {
       await axios.post(`${baseUrl}/api/issues`, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      setSuccess('Issue submitted successfully');
+      setSuccess(true);
       setForm({ title: '', description: '', category: '' });
       setPhotos([]);
     } catch (err) {
@@ -155,6 +154,30 @@ const Home = () => {
     }
     setSubmitting(false);
   };
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 py-16">
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
+          <div className="text-green-600 mb-6">
+            <svg className="mx-auto h-14 w-14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold mb-4 text-green-800">Issue Submitted!</h2>
+          <p className="mb-8 text-green-700">
+            Your issue has been successfully submitted. Thank you for your feedback.
+          </p>
+          <button
+            className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-400 transition"
+            onClick={() => navigate('/')}
+          >
+            Go to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-start sm:items-center justify-center bg-gray-50 px-4 py-8 sm:py-12">
@@ -243,10 +266,8 @@ const Home = () => {
             />
           </div>
 
-          {(error || success) && (
-            <p className={`text-center font-medium ${error ? 'text-red-600' : 'text-green-600'}`}>
-              {error || success}
-            </p>
+          {(error) && (
+            <p className="text-center font-medium text-red-600">{error}</p>
           )}
 
           <button
