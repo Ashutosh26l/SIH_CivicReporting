@@ -307,6 +307,7 @@ const Navbar = ({ isMenuOpen, setIsMenuOpen }) => (
       {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center space-x-8">
         <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
+        <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report An Issue</Link>
         <Link to="/" className="text-green-700 hover:text-green-900 transition-colors">Home</Link>
       </nav>
       {/* Mobile Menu Button */}

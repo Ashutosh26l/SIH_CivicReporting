@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 // --- Loading Animation Component ---
 const CenteredLoadingAnimation = () => (
