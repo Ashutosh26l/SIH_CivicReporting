@@ -136,29 +136,8 @@ export default function LandingPage() {
       {/* --- Footer --- */}
       <footer className="bg-gray-800 text-white">
         <div className="container mx-auto px-6 py-10">
-          <div className="grid md:grid-cols-3 gap-8 text-center md:text-left">
-            <div>
-              <h3 className="font-bold text-lg mb-4">About Civic Connect</h3>
-              <p className="text-gray-400 text-sm">A Government of Jharkhand initiative to empower citizens and improve public services through technology and collaboration.</p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-sm">
-                {/* === THIS IS THE UPDATED PART === */}
-                <li><Link to="/home" className="text-gray-400 hover:text-white">Report an Issue</Link></li>
-                {/* === END OF UPDATE === */}
-                <li><a href="#" className="text-gray-400 hover:text-white">FAQs</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Contact Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Connect With Us</h3>
-              <p className="text-gray-400 text-sm">Follow us on social media for updates.</p>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-sm">
-            <p>&copy; {new Date().getFullYear()} Government of Jharkhand. All Rights Reserved.</p>
+          <div className="text-center text-gray-200 text-m">
+            <p>&copy; {new Date().getFullYear()} Pioneers. All Rights Reserved.</p>
           </div>
         </div>
       </footer>

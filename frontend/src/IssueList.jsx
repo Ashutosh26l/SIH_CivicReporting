@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 // --- Helper Component for Status Badges ---
 const StatusBadge = ({ status }) => {
@@ -136,6 +137,7 @@ const IssueList = () => {
 
   return (
     <>
+    <Navbar />
       <ComponentStyles />
       <div className="issue-list-container">
         <header className="main-header">
