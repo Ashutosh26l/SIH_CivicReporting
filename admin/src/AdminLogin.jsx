@@ -10,7 +10,7 @@ const AdminLogin = () => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [successMessage, setSuccessMessage] = useState('');
   
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
