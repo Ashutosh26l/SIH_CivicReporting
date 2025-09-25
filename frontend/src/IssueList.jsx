@@ -173,7 +173,7 @@ const ComponentStyles = () => (
       --red: #ef4444;
       --gray: #6b7280;
     }
-    .issue-list-container { font-family: var(--font-primary); background-color: var(--bg-color); min-height: 100vh; padding: 3rem 1.5rem; }
+    .issue-list-container { font-family: var(--font-primary); background-color: var(--bg-color); min-height: 100vh; padding: 1rem 1.5rem; }
     .main-header { text-align: center; margin-bottom: 3rem; }
     .main-header h1 { font-size: 2.5rem; font-weight: 700; color: var(--text-dark); margin: 0; }
     .main-header p { font-size: 1.1rem; color: var(--text-light); margin-top: 0.5rem; }
