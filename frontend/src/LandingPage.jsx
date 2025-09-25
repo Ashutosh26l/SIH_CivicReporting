@@ -60,7 +60,6 @@ export default function LandingPage() {
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans text-gray-800">
-      <Navbar />
 
       <main>
         {/* --- Hero Section --- */}
@@ -106,32 +105,8 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        {/* --- Recent Reports Section --- */}
-        <section className="py-16 md:py-24 bg-gray-50">
-          <div className="container mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">Latest Community Reports</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {issues.map((issue) => (
-                <div key={issue.id} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2">
-                  <img src={issue.imageUrl} alt={issue.category} className="w-full h-48 object-cover"/>
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <p className="text-sm font-medium text-green-700">{issue.category}</p>
-                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusColor(issue.status)}`}>{issue.status}</span>
-                    </div>
-                    <p className="text-lg font-bold text-gray-800">{issue.location}</p>
-                    <p className="text-gray-500 text-sm mt-1">Reported on September 24, 2025</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <button className="bg-transparent border-2 border-green-600 text-green-600 font-bold py-2 px-6 rounded-lg hover:bg-green-600 hover:text-white transition-colors duration-300">View More Reports</button>
-            </div>
-          </div>
-        </section>
       </main>
+      <Navbar />
     </div>
   );
 }

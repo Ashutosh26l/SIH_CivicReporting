@@ -14,7 +14,7 @@ const IssuesList = () => {
   useEffect(() => {
     const adminToken = localStorage.getItem('admin');
     if (!adminToken) {
-      navigate('/admin-login');
+      navigate('/login');
     }
   }, [navigate]);
 

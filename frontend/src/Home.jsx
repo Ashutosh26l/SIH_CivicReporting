@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-
-const MenuIcon = ({ className }) => (
-  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-);
-const XIcon = ({ className }) => (
-  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
+import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Home = () => {
   const [photos, setPhotos] = useState([]);
@@ -196,14 +183,23 @@ const Home = () => {
         <h1 className="text-3xl font-extrabold mb-6 text-green-900 text-center">Create New Issue</h1>
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           <div>
-            <label className="block mb-2 font-semibold text-gray-700">Capture or select photos (max 10):</label>
+            <label htmlFor="file-input" className="block mb-2 font-semibold text-gray-700 cursor-pointer">
+              <button
+                type="button"
+                className="px-6 py-3 bg-green-600 text-white font-semibold rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                onClick={() => document.getElementById('file-input').click()}
+              >
+                Choose Photos (max 10)
+              </button>
+            </label>
             <input
               type="file"
+              id="file-input"
               accept="image/*"
               multiple
               capture="environment"
               onChange={handlePhotoChange}
-              className="block w-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+              className="hidden"
             />
             <div className="flex flex-wrap gap-4 mt-3">
               {previews.map((src, i) => (
@@ -277,17 +273,14 @@ const Home = () => {
             />
           </div>
 
-          {(error) && (
-            <p className="text-center font-medium text-red-600">{error}</p>
-          )}
+          {error && <p className="text-center font-medium text-red-600">{error}</p>}
 
           <button
             type="submit"
             disabled={submitting || photos.length < 1}
-            className={`w-full py-3 rounded font-semibold transition duration-200 ${
-              submitting || photos.length < 1
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700 text-white focus:ring-4 focus:ring-green-400'
+            className={`w-full py-3 rounded font-semibold transition duration-200 ${submitting || photos.length < 1
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700 text-white focus:ring-4 focus:ring-green-400'
             }`}
           >
             {submitting ? 'Submitting...' : 'Submit Issue'}
@@ -297,36 +290,5 @@ const Home = () => {
     </div>
   );
 };
-
-const Navbar = ({ isMenuOpen, setIsMenuOpen }) => (
-  <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg shadow-sm z-50 w-full">
-    <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-      <div className="flex items-center space-x-3">
-        <span className="text-2xl font-extrabold text-green-700 tracking-wider">Pioneers</span>
-      </div>
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center space-x-8">
-        <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-        <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report An Issue</Link>
-        <Link to="/" className="text-green-700 hover:text-green-900 transition-colors">Home</Link>
-      </nav>
-      {/* Mobile Menu Button */}
-      <div className="md:hidden">
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-green-700 focus:outline-none">
-          {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
-        </button>
-      </div>
-    </div>
-    {/* Mobile Navigation Menu */}
-    {isMenuOpen && (
-      <div className="md:hidden bg-white border-t">
-        <nav className="flex flex-col items-center space-y-4 py-4">
-          <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-          <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-green-700 hover:text-green-900 transition-colors">Home</Link>
-        </nav>
-      </div>
-    )}
-  </header>
-);
 
 export default Home;

@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const MenuIcon = ({ className }) => (
-  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
+// --- SVG Icons (for bottom navbar) ---
+const HomeIcon = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3l9 8h-5v8h-8v-8H3l9-8z"></path>
   </svg>
 );
 
-const XIcon = ({ className }) => (
-  <svg className={className} stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
+const ListIcon = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M3 12h18M3 18h18"></path>
   </svg>
 );
 
+const ReportIcon = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2h12c1.1 0 1.99-.9 1.99-2V8l-6-6z"></path>
+  </svg>
+);
+
+const UserIcon = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM12 14c-3.31 0-6 2.69-6 6v2h12v-2c0-3.31-2.69-6-6-6z"></path>
+  </svg>
+);
+
+// --- Navbar Component ---
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -34,69 +44,44 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <span className="text-2xl font-extrabold text-green-700 tracking-wider">nagarSeva</span>
-        </div>
+    <footer className="fixed bottom-0 left-0 w-full bg-white shadow-lg z-50">
+      <div className="container mx-auto px-6 py-2 flex justify-around items-center">
+        <Link to="/" className="flex flex-col items-center text-gray-600 hover:text-green-700 transition-colors">
+          <HomeIcon className="h-6 w-6" />
+          <span className="text-xs">Home</span>
+        </Link>
+        <Link to="/issuelist" className="flex flex-col items-center text-gray-600 hover:text-green-700 transition-colors">
+          <ListIcon className="h-6 w-6" />
+          <span className="text-xs">Issue List</span>
+        </Link>
+        <Link to="/home" className="flex flex-col items-center text-gray-600 hover:text-green-700 transition-colors">
+          <ReportIcon className="h-6 w-6" />
+          <span className="text-xs">Report</span>
+        </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
-          <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-          <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report An Issue</Link>
+        {/* Display Profile link only if logged in */}
+        {isLoggedIn && (
+          <Link to="/profile" className="flex flex-col items-center text-gray-600 hover:text-green-700 transition-colors">
+            <UserIcon className="h-6 w-6" />
+            <span className="text-xs">Profile</span>
+          </Link>
+        )}
 
-          {!isLoggedIn ? (
-            <>
-              <Link to="/signup" className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
-              <Link to="/login" className="text-gray-600 hover:text-green-700 transition-colors font-semibold">Login</Link>
-            </>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm hover:bg-red-700 hover:shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
-            >
-              Logout
-            </button>
-          )}
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-800 focus:outline-none">
-            {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+        {/* Display Login link or Logout button */}
+        {!isLoggedIn ? (
+          <Link to="/login" className="text-gray-600 hover:text-green-700 transition-colors font-semibold">
+            Login
+          </Link>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm hover:bg-red-700 hover:shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
+          >
+            Logout
           </button>
-        </div>
+        )}
       </div>
-
-      {/* Mobile Nav */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <nav className="flex flex-col items-center space-y-4 py-4">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">Home</Link>
-            <Link to="/issuelist" className="text-gray-600 hover:text-green-700 transition-colors">Issue List</Link>
-            <Link to="/home" className="text-gray-600 hover:text-green-700 transition-colors">Report An Issue</Link>
-
-            {!isLoggedIn ? (
-              <>
-                <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors">SignUp</Link>
-                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-green-700 transition-colors font-semibold">Login</Link>
-              </>
-            ) : (
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  handleLogout();
-                }}
-                className="bg-red-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm hover:bg-red-700 hover:shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
-              >
-                Logout
-              </button>
-            )}
-          </nav>
-        </div>
-      )}
-    </header>
+    </footer>
   );
 };
 
