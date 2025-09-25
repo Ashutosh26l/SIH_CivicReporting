@@ -67,6 +67,7 @@ const IssueDetail = () => {
         setLoading(true);
         const response = await axios.get(`${baseUrl}/api/issues/${issueId}`);
         const fetchedIssue = response.data.issue;
+        console.log(fetchedIssue);
         setIssue(fetchedIssue);
 
         setUpvoteCount(fetchedIssue.upvotes?.count ?? 0);
@@ -160,7 +161,7 @@ const IssueDetail = () => {
   };
   
   const formatDate = (dateString) => new Date(dateString).toLocaleDateString(undefined, {
-    year: 'numeric', month: 'long', day: 'numeric'
+    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit',  hour12: true
   });
 
   const formatCommentTimestamp = (dateString) => new Date(dateString).toLocaleString(undefined, {
@@ -181,27 +182,39 @@ const IssueDetail = () => {
   return (
     <div className="font-sans bg-gray-50 min-h-screen py-12 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl p-8 lg:p-12 shadow-xl border border-gray-200">
-        <header className="text-center mb-8 pb-6 border-b border-dashed border-gray-200">
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gray-900 mb-4 leading-tight bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+        <header className="relative mb-8 pb-6 border-b border-dashed border-gray-200 pt-12">
+          
+          {/* Centered Title */}
+          <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gray-900 mb-4 leading-tight text-center bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
             {issue.issue_title}
           </h1>
+          
+          {/* Top Section: Category and Date */}
+          <div className="absolute top-0 left-0 right-0 flex justify-between items-center text-sm text-gray-600 mt-4">
+            <div className="flex items-center bg-gray-50 px-4 py-2 rounded-full">
+              <CategoryIcon /> 
+              <span className="font-medium">{issue.category}</span>
+            </div>
+            <div className="flex items-center bg-gray-50 px-4 py-2 rounded-full">
+              <CalendarIcon /> 
+              <span className="font-medium">{formatDate(issue.created_at)}</span>
+            </div>
+          </div>
+
           <StatusBadge status={issue.status} />
         </header>
 
         <section className="flex flex-wrap justify-center gap-6 mb-8 text-gray-600 text-sm">
+          {/* Location Section */}
           <div className="flex items-center bg-gray-50 px-4 py-2 rounded-full">
             <LocationIcon /> {issue.location}
           </div>
-          <div className="flex items-center bg-gray-50 px-4 py-2 rounded-full">
-            <CalendarIcon /> Reported on {formatDate(issue.created_at)}
-          </div>
-          <div className="flex items-center bg-gray-50 px-4 py-2 rounded-full">
-            <CategoryIcon /> Category: <strong className="ml-2 font-medium">{issue.category}</strong>
-          </div>
         </section>
 
+        {/* Issue Description */}
         <p className="text-lg leading-relaxed text-gray-800 mb-8">{issue.description}</p>
         
+        {/* Image Section */}
         {issue.images && issue.images.length > 0 && (
           <div className="mb-6">
             <div className="rounded-xl overflow-hidden mb-4 shadow-lg bg-white p-2 border border-gray-200">
@@ -212,7 +225,7 @@ const IssueDetail = () => {
                 <div 
                   key={index} 
                   className={`w-24 h-20 rounded-lg overflow-hidden cursor-pointer border-2 transition-all duration-200 shadow-sm bg-white 
-                             ${img === mainImage ? 'border-pink-500 shadow-md transform -translate-y-1' : 'border-transparent hover:border-blue-400 hover:shadow-md'}`} 
+                            ${img === mainImage ? 'border-pink-500 shadow-md transform -translate-y-1' : 'border-transparent hover:border-blue-400 hover:shadow-md'}`} 
                   onClick={() => setMainImage(img)}
                 >
                   <img src={img} alt={`Issue thumbnail ${index + 1}`} className="w-full h-full object-cover" />
@@ -221,20 +234,22 @@ const IssueDetail = () => {
             </div>
           </div>
         )}
-        
+
+        {/* Upvote Button */}
         <div className="flex items-center mt-6">
           <button 
             className={`flex items-center gap-3 font-semibold px-5 py-2 rounded-full transition-all duration-200 border-2 
-                       ${hasUpvoted ? 'bg-blue-600 border-blue-600 text-white shadow-lg hover:shadow-xl hover:scale-105' : 'bg-gray-50 border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:shadow-md'}`} 
+                      ${hasUpvoted ? 'bg-blue-600 border-blue-600 text-white shadow-lg hover:shadow-xl hover:scale-105' : 'bg-gray-50 border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:shadow-md'}`} 
             onClick={handleUpvoteClick}
           >
             <UpvoteIcon filled={hasUpvoted} />
             <span>{upvoteCount} Upvote{upvoteCount !== 1 ? 's' : ''}</span>
           </button>
         </div>
-        
+
         <hr className="border-t border-dashed border-gray-200 my-6" />
 
+        {/* Comments Section */}
         <section>
           <button 
             className="flex items-center justify-center gap-3 w-full py-3 px-5 text-lg font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-xl cursor-pointer transition-all duration-200 text-left hover:bg-white hover:border-blue-400 hover:text-blue-600 hover:shadow-md" 
@@ -288,6 +303,7 @@ const IssueDetail = () => {
       </div>
     </div>
   );
+
 };
 
 export default IssueDetail;
