@@ -3,21 +3,43 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 
+// --- Loading Skeleton Component ---
+const IssueCardSkeleton = () => (
+  <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 animate-pulse">
+    <div className="flex justify-between items-center mb-4">
+      <div className="h-5 bg-gray-200 rounded-full w-24"></div>
+      <div className="h-5 bg-gray-200 rounded-full w-20"></div>
+    </div>
+    <div className="h-6 bg-gray-200 rounded-md w-3/4 mb-6"></div>
+    <div className="flex justify-between items-center">
+      <div className="h-8 bg-gray-200 rounded-full w-28"></div>
+      <div className="h-6 bg-gray-200 rounded-md w-24"></div>
+    </div>
+  </div>
+);
+
 // --- Helper Component for Status Badges ---
 const StatusBadge = ({ status }) => {
   const normalizedStatus = status ? status.toLowerCase() : 'unknown';
-  let statusClass = 'status-badge ';
+  let colorClasses = '';
 
   switch (normalizedStatus) {
-    case 'open': statusClass += 'status-open'; break;
-    case 'in progress': statusClass += 'status-in-progress'; break;
-    case 'closed': statusClass += 'status-closed'; break;
-    default: statusClass += 'status-unknown';
+    case 'open': 
+      colorClasses = 'bg-green-100 text-green-800'; 
+      break;
+    case 'in progress': 
+      colorClasses = 'bg-yellow-100 text-yellow-800'; 
+      break;
+    case 'closed': 
+      colorClasses = 'bg-red-100 text-red-800'; 
+      break;
+    default: 
+      colorClasses = 'bg-gray-100 text-gray-800';
   }
 
   return (
-    <div className={statusClass}>
-      <span className="status-dot"></span>
+    <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${colorClasses}`}>
+      <span className={`w-2 h-2 mr-2 rounded-full ${colorClasses.replace('text', 'bg').replace('100', '500')}`}></span>
       {status || 'N/A'}
     </div>
   );
@@ -50,8 +72,11 @@ const IssueList = () => {
     };
     fetchIssues();
   }, [baseUrl]);
+  
+  // UPDATED: Accepts the event object 'e' to stop propagation
+  const handleUpvoteToggle = async (e, issueId) => {
+    e.stopPropagation(); // This is crucial to prevent navigation when upvoting
 
-  const handleUpvoteToggle = async (issueId) => {
     if (!currentUserId) {
       alert("You must be logged in to upvote.");
       return;
@@ -63,13 +88,12 @@ const IssueList = () => {
     
     const hasUpvoted = issueToUpdate.upvotes.users.includes(currentUserId);
 
-    // Optimistic UI Update
     const updatedIssues = issues.map(issue => {
       if (issue.id === issueId) {
         const newCount = hasUpvoted ? issue.upvotes.count - 1 : issue.upvotes.count + 1;
         const newUsers = hasUpvoted
-          ? issue.upvotes.users.filter(id => id !== currentUserId)
-          : [...issue.upvotes.users, currentUserId];
+          ? issueToUpdate.upvotes.users.filter(id => id !== currentUserId)
+          : [...issueToUpdate.upvotes.users, currentUserId];
         return { ...issue, upvotes: { count: newCount, users: newUsers } };
       }
       return issue;
@@ -92,119 +116,93 @@ const IssueList = () => {
     }
   };
   
-  // UPDATED: Navigation now passes ID via router state
   const handleViewDetails = (issueId) => {
     navigate('/issue-detail', { state: { issueId: issueId } });
   };
 
-  const renderLoading = () => <div className="status-container"><div className="loader"></div><p>Fetching Issues...</p></div>;
-  const renderError = () => <div className="status-container error"><h3>Oops! Something went wrong.</h3><p>{error}</p></div>;
-  const renderNoIssues = () => <div className="status-container"><h3>No Issues Found</h3><p>It looks like the issue tracker is all clear!</p></div>;
+  const renderContent = () => {
+    if (loading) {
+      return (
+        Array.from({ length: 6 }).map((_, index) => <IssueCardSkeleton key={index} />)
+      );
+    }
 
-  const renderIssueGrid = () => (
-    <div className="issue-grid">
-      {issues.map((issue) => {
+    if (error) {
+      return (
+        <div className="col-span-full text-center p-12 bg-red-50 rounded-lg">
+          <h3 className="text-xl font-semibold text-red-700">Oops! Something went wrong.</h3>
+          <p className="text-red-600 mt-2">{error}</p>
+        </div>
+      );
+    }
+    
+    if (issues.length === 0) {
+      return (
+        <div className="col-span-full text-center p-12 bg-gray-50 rounded-lg">
+          <h3 className="text-xl font-semibold text-gray-700">No Issues Found</h3>
+          <p className="text-gray-500 mt-2">It looks like the issue tracker is all clear!</p>
+        </div>
+      );
+    }
+
+    return (
+      issues.map((issue) => {
         const hasUserUpvoted = currentUserId ? issue.upvotes.users.includes(currentUserId) : false;
         
         return (
-          <div key={issue.id} className="issue-card">
+          // UPDATED: onClick is on the main card div
+          <div 
+            key={issue.id} 
+            className="group bg-white rounded-xl p-6 shadow-md border border-gray-200 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+            onClick={() => handleViewDetails(issue.id)}
+          >
             <div>
-              <div className="card-header">
-                <span className="issue-category">{issue.category}</span>
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">{issue.category}</span>
                 <StatusBadge status={issue.status} />
               </div>
-              <h2 className="issue-title">{issue.issue_title}</h2>
+              <h2 className="text-lg font-bold text-gray-800 leading-tight pointer-events-none">{issue.issue_title}</h2>
             </div>
-            <div className="card-footer">
+            <div className="flex justify-between items-center mt-6">
               <button
-                className={`upvote-btn ${hasUserUpvoted ? 'active' : ''}`}
-                onClick={() => handleUpvoteToggle(issue.id)}
+                className={`flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-colors duration-200 z-10 ${
+                  hasUserUpvoted 
+                    ? 'bg-indigo-600 text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+                // UPDATED: Pass the event object to stop propagation
+                onClick={(e) => handleUpvoteToggle(e, issue.id)}
               >
-                👍 {issue.upvotes.count}
+                👍 <span>{issue.upvotes.count}</span>
               </button>
-              <button 
-                className="view-details-btn"
-                onClick={() => handleViewDetails(issue.id)}
+              {/* UPDATED: This button is now just a visual cue. The group-hover makes it react to the card hover. */}
+              <div
+                className="text-sm font-semibold text-gray-500 group-hover:text-indigo-600 transition-colors duration-200"
               >
                 View Details →
-              </button>
+              </div>
             </div>
           </div>
         );
-      })}
-    </div>
-  );
+      })
+    );
+  };
 
   return (
-    <>
-    <Navbar />
-      <ComponentStyles />
-      <div className="issue-list-container">
-        <header className="main-header">
-          <h1>Active Issues</h1>
-          <p>A summary of all reported issues.</p>
+    <div className="bg-gray-50 min-h-screen">
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Active Issues</h1>
+          <p className="mt-4 text-xl text-gray-600">A summary of all reported issues.</p>
         </header>
-        <main>
-          {loading ? renderLoading() : 
-           error ? renderError() : 
-           issues.length > 0 ? renderIssueGrid() :
-           renderNoIssues()}
+
+        <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {renderContent()}
         </main>
       </div>
-    </>
+    </div>
   );
 };
-
-// --- Scoped CSS for the Component ---
-const ComponentStyles = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-    :root {
-      --font-primary: 'Poppins', sans-serif;
-      --bg-color: #f4f7fe;
-      --card-bg: #ffffff;
-      --text-dark: #1e293b;
-      --text-light: #64748b;
-      --accent-color: #4f46e5;
-      --border-color: #e2e8f0;
-      --shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05);
-      --green: #10b981;
-      --orange: #f59e0b;
-      --red: #ef4444;
-      --gray: #6b7280;
-    }
-    .issue-list-container { font-family: var(--font-primary); background-color: var(--bg-color); min-height: 100vh; padding: 1rem 1.5rem; }
-    .main-header { text-align: center; margin-bottom: 3rem; }
-    .main-header h1 { font-size: 2.5rem; font-weight: 700; color: var(--text-dark); margin: 0; }
-    .main-header p { font-size: 1.1rem; color: var(--text-light); margin-top: 0.5rem; }
-    .issue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
-    .issue-card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border-color); box-shadow: var(--shadow); transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; display: flex; flex-direction: column; justify-content: space-between; }
-    .issue-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.07), 0 10px 10px -5px rgba(0,0,0,0.04); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .issue-category { font-size: 0.8rem; font-weight: 500; color: var(--accent-color); background-color: #eef2ff; padding: 0.25rem 0.75rem; border-radius: 99px; }
-    .issue-title { font-size: 1.25rem; font-weight: 600; color: var(--text-dark); margin: 0; line-height: 1.4; }
-    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
-    .upvote-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-primary); font-weight: 600; font-size: 0.9rem; padding: 0.5rem 1rem; border-radius: 99px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); background-color: #f8fafc; color: var(--text-light); }
-    .upvote-btn:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
-    .upvote-btn.active { background-color: var(--accent-color); border-color: var(--accent-color); color: #fff; }
-    .upvote-btn.active:hover { background-color: #4338ca; }
-    .view-details-btn { font-family: var(--font-primary); font-weight: 500; color: var(--text-light); background: none; border: none; padding: 0.5rem; cursor: pointer; transition: color 0.2s ease; }
-    .view-details-btn:hover { color: var(--accent-color); }
-    .status-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 500; text-transform: capitalize; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .status-open { background-color: #d1fae5; color: #065f46; }
-    .status-open .status-dot { background-color: var(--green); }
-    .status-in-progress { background-color: #fef3c7; color: #92400e; }
-    .status-in-progress .status-dot { background-color: var(--orange); }
-    .status-closed { background-color: #fee2e2; color: #991b1b; }
-    .status-closed .status-dot { background-color: var(--red); }
-    .status-unknown { background-color: #f3f4f6; color: #4b5563; }
-    .status-unknown .status-dot { background-color: var(--gray); }
-    .status-container { text-align: center; padding: 4rem 1rem; color: var(--text-light); }
-    .status-container.error h3 { color: var(--red); }
-    .loader { width: 48px; height: 48px; border: 5px solid var(--accent-color); border-bottom-color: transparent; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; margin-bottom: 1rem; }
-    @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  `}</style>
-);
 
 export default IssueList;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import Navbar from './Navbar';
 
 const UserLogin = ({ onLoginSuccess }) => {
@@ -76,9 +76,11 @@ const UserLogin = ({ onLoginSuccess }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full font-semibold py-3 rounded-lg shadow-md focus:outline-none focus:ring-4 transition
-                ${loading ? 'bg-green-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 focus:ring-green-400'}
-              `}
+              className={`w-full font-semibold py-3 text-white rounded-lg shadow-md focus:outline-none focus:ring-4 transition ${
+                loading 
+                  ? 'bg-green-400 cursor-not-allowed' 
+                  : 'bg-green-600 hover:bg-green-700 focus:ring-green-300'
+              }`}
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">
@@ -109,6 +111,17 @@ const UserLogin = ({ onLoginSuccess }) => {
               )}
             </button>
           </form>
+          
+          {/* Signup Link */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link to="/signup" className="font-semibold text-green-600 hover:text-green-700 transition-colors">
+                Create an account
+              </Link>
+            </p>
+          </div>
+
         </div>
       </main>
     </div>
